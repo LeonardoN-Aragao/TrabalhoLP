@@ -1,4 +1,5 @@
 #ASCII
+
 code(' ',32).
 code('!',33).
 code('"',34).
@@ -92,18 +93,7 @@ code('y',121).
 code('z',122).
 
 string2code([H], L):- code(H,Y),addList(Y,L,L).
-string2code([H | T],L):-code(H,Y),addList(Y,L,L),string2code(T,L),write(L).
-
-/*
-auxCaesar([],_,_).
-auxCaesar([H | T],X,L):-
-    string2Code(H,R),
-    write(R),
-    add(R,X,R),
-    write(R),
-    addList(R,L,L1),
-    auxCaesar(T,X,L1).
-*/
+string2code([H | T],L):-code(H,Y),addList(Y,L,L),string2code(T,L).
 
 /*
     NOVA VERSÃO
@@ -114,54 +104,34 @@ auxCaesar([H | T],X,L):-
     adiciona no banco
     assert(word(algo)).
 */
-list_member(X,[X|_]).
-list_member(X,[_|TAIL]) :- list_member(X,TAIL).
-
-addList(A,T,T):- list_member(A,T),!.
-addList(A,T,[A|T]).
-
-remove(A,[A|B],B).
-remove(A,[B|C],[B|D]):- remove(A,C,D).
-
-add(A,B,C):-remove(A,C,B).
-
-teste(A,B,[A|B]).
 
 greater(Z,Y,R):- 
     (Z < Y, R is Z + Y;
         Z > Y, R is Z).
 
-cypher(In, Offset, Out):-
+/*cypher(In, Offset, Out):-
     code(In, X),
     Y is X + Offset,
     Z is Y mod 123,
     greater(Z,32,R),
+    code(Out,R).*/
+
+cypher(Offset,In,Out):-
+    code(In, X),
+    Y is X + Offset,
+    Z is Y mod 123,
+    greater(Z,97,R),
     code(Out,R).
 
-auxCaesar([],_,_). 
-auxCaesar([H | T],X,L):- 
-    %guitracer,
-    %trace,
-    cypher(H,X,C),
-    addList(C,L,L),
-    format('~w -> ~w',[H,C]),
-    nl,
-    auxCaesar(T,X,L).
-
-caesar(String,X):-
-    atom_codes(A, String), 
-    atom_chars(A, [H | T]),
-    auxCaesar([H | T],X,L),
-    string_chars(L,S),
-    writeln(S).
+caesar(Deslocamento,String,ListaSaida):-
+    string_chars(String,L),
+    maplist(cypher(Deslocamento
+    ),L,ListaSaida).
 
 process:-
-    %cypher('a', 30, X),
-    %format('cifrando ~w: ~w', [a, X]),
-    %cypher(L, 1,'B'),
-    %format('~ndecifrando ~w: ~w', ['B', L]),
-    %guitracer,
-    %trace,
-    %notrace,
-    caesar("abacate",5).
+    guitracer,
+    trace,
+    caesar(5,"abacate",ListaSaida),
+    string_chars(Frase,ListaSaida),
+    writeln(Frase).
 
