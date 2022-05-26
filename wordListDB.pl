@@ -1,6 +1,6 @@
 
 :- module(wordListDB, [ 
-    attach_word_db/1, add_word/1, current_word/2, set_word/1, del_word/1
+    attach_word_db/1, add_word/1, current_word/2, set_word/2, del_word/1
     ]).
 
 :- use_module(library(persistency)).
@@ -21,9 +21,9 @@ add_word(Word):-
     length(List, S),
     assert_word(List, S).
 
-set_word(Word):-
-    word(Word,_),
-    del(Word),
+set_word(OldWord,Word):-
+    word(OldWord,_),
+    del(OldWord),
     add_word(Word).
 
 del_word(Word):-
