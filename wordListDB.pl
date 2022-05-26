@@ -16,8 +16,8 @@ current_word(Word, _Lenght):-
     word(Word, _Length).
 
 add_word(Word):-
-    not(word(Word, _)),
     string_chars(Word,List),
+    not(word(List, _)),
     length(List, S),
     assert_word(List, S).
 

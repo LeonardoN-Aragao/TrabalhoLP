@@ -46,13 +46,10 @@ cypher(Letter,In,Out):-
 caesar(Char,StringEntrada,ListaSaida):-
     code(Char, Deslocamento),
     string_chars(StringEntrada,L),
-    writeln(L),
     maplist(cypher(Deslocamento
     ),L,ListaSaida).
 
 process:-
-    add_word("abacate"),
     caesar('a',"leobrabo",ListaSaida),
     string_chars(Frase,ListaSaida),
     writeln(Frase).
-
