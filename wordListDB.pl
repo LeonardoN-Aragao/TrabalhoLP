@@ -19,8 +19,6 @@ add_word(Word):-
     not(word(Word, _)),
     string_chars(Word,List),
     length(List, S),
-    writeln(Word),
-    writeln(List),
     assert_word(List, S).
 
 set_word(Word):-
