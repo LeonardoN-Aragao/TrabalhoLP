@@ -1,4 +1,5 @@
-#ASCII
+:-use_module(wordListDB).
+:- attach_word_db("wordListDB.txt").
 
 code(' ',32).
 code('!',33).
@@ -92,46 +93,31 @@ code('x',120).
 code('y',121).
 code('z',122).
 
-string2code([H], L):- code(H,Y),addList(Y,L,L).
-string2code([H | T],L):-code(H,Y),addList(Y,L,L),string2code(T,L).
-
-/*
-    NOVA VERSÃO
-
-    carrega na memoria fatos
-    [bd].
-
-    adiciona no banco
-    assert(word(algo)).
-*/
+%string2code([H], L):- code(H,Y),addList(Y,L,L).
+%string2code([H | T],L):-code(H,Y),addList(Y,L,L),string2code(T,L).
 
 greater(Z,Y,R):- 
     (Z < Y, R is Z + Y;
         Z > Y, R is Z).
 
-/*cypher(In, Offset, Out):-
+cypher(Letter,In,Out):-
     code(In, X),
-    Y is X + Offset,
+    Y is X + Letter,
     Z is Y mod 123,
     greater(Z,32,R),
-    code(Out,R).*/
-
-cypher(Offset,In,Out):-
-    code(In, X),
-    Y is X + Offset,
-    Z is Y mod 123,
-    greater(Z,97,R),
     code(Out,R).
 
-caesar(Deslocamento,String,ListaSaida):-
-    string_chars(String,L),
+caesar(Deslocamento,StringEntrada,ListaSaida):-
+    string_chars(StringEntrada,L),
+    writeln(L),
     maplist(cypher(Deslocamento
     ),L,ListaSaida).
 
 process:-
     guitracer,
     trace,
-    caesar(5,"abacate",ListaSaida),
+    add_word("abacate"),
+    caesar('a',"abacate",ListaSaida),
     string_chars(Frase,ListaSaida),
     writeln(Frase).
 

@@ -1,0 +1,2 @@
+created(1653525650.4434698).
+assert(word([a,b,a,c,a,t,e],7)).
