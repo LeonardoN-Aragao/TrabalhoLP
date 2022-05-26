@@ -1,73 +1,9 @@
 :-use_module(wordListDB).
 :- attach_word_db("wordListDB.txt").
 
-code(' ',32).
-code('!',33).
-code('"',34).
-code('#',35).
-code('$',36).
-code('%',37).
-code('&',38).
-code('\'',39).
-code('(',40).
-code(')',41).
-code('*',42).
-code('+',43).
-code(',',44).
-code('-',45).
-code('.',46).
-code('/',47).
-code('0',48).
-code('1',49).
-code('2',50).
-code('3',51).
-code('4',52).
-code('5',53).
-code('6',54).
-code('7',55).
-code('8',56).
-code('9',57).
-code(':',58).
-code(';',59).
-code('<',60).
-code('=',61).
-code('>',62).
-code('?',63).
-code('@',64).
-code('A',65).
-code('B',66).
-code('C',67).
-code('D',68).
-code('E',69).
-code('F',70).
-code('G',71).
-code('H',72).
-code('I',73).
-code('J',74).
-code('K',75).
-code('L',76).
-code('M',77).
-code('N',78).
-code('O',79).
-code('P',80).
-code('Q',81).
-code('R',82).
-code('S',83).
-code('T',84).
-code('U',85).
-code('V',86).
-code('W',87).
-code('X',88).
-code('Y',89).
-code('Z',90).
-code('[',91).
-code('\\',92).
-code(']',93).
-code('^',94).
-code('_',95).
-code('`',96).
-code('a',97).
-code('b',98).
+code(' ',0).
+code('a',1).
+code('b',2).
 code('c',99).
 code('d',100).
 code('e',101).
@@ -107,7 +43,8 @@ cypher(Letter,In,Out):-
     greater(Z,32,R),
     code(Out,R).
 
-caesar(Deslocamento,StringEntrada,ListaSaida):-
+caesar(Char,StringEntrada,ListaSaida):-
+    code(Char,Deslocamento),
     string_chars(StringEntrada,L),
     writeln(L),
     maplist(cypher(Deslocamento
