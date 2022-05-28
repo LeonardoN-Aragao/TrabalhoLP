@@ -27,7 +27,8 @@ set_word(OldWord,Word):-
     add_word(Word).
 
 del_word(Word):-
-    word(Word, _),
-    del(Word).
+    string_chars(Word,List),
+    word(List, _),
+    del(List).
 
 
