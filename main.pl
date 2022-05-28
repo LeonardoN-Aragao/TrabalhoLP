@@ -29,27 +29,26 @@ code('x', 24).
 code('y', 25).
 code('z', 26).
 
-%string2code([H], L):- code(H,Y),addList(Y,L,L).
-%string2code([H | T],L):-code(H,Y),addList(Y,L,L),string2code(T,L).
+string2code(In, Out):- maplist(code(), In, Out).
 
-%greater(Z,Y,R):- 
-%    (Z < Y, R is Z + Y;
-%        Z > Y, R is Z).
+isEmpty(List):- not(member(_,List)).
 
 cypher(Letter,In,Out):-
     code(In, X),
     Y is X + Letter,
     Z is Y mod 27,
-    %greater(Z,32,R),
     code(Out,Z).
 
 caesar(Char,StringEntrada,ListaSaida):-
     code(Char, Deslocamento),
-    string_chars(StringEntrada,L),
-    maplist(cypher(Deslocamento
-    ),L,ListaSaida).
+    (isEmpty(StringEntrada)
+    -> string_chars(StringEntrada,L), maplist(cypher(Deslocamento),L,ListaSaida)
+    ; string_chars(ListaSaida, L), maplist(cypher(Deslocamento),StringEntrada,L)
+    ).
+    
 
 process:-
-    caesar('a',"leobrabo",ListaSaida),
-    string_chars(Frase,ListaSaida),
+    caesar('a',"leobrabo",Saida),
+    string_chars(Frase,Saida),
     writeln(Frase).
+
