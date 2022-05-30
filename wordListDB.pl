@@ -1,4 +1,8 @@
-
+/*
+    Trabalho Linguagem de Programação - UFJF
+    Gabriel Fortunato - 
+    Leonardo Nunes - 201665565C
+*/
 :- module(wordListDB, [ 
     attach_word_db/1, add_word/1, current_word/2, set_word/2, del_word/1
     ]).
