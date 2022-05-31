@@ -16,8 +16,8 @@ del(Word):- retractall_word(Word, _).
 attach_word_db(FileName):-
     db_attach(FileName, []).
 
-current_word(Word, _Length):-
-    word(Word, _Length).
+current_word(Word, Length):-
+    word(Word, Length).
 
 add_word(Word):-
     string_chars(Word,List),

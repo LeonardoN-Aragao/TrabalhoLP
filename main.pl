@@ -8,7 +8,9 @@
 :-use_module(wordListDB).
 :- attach_word_db("wordListDB.db").
 
-% Adiciona Fatos
+% ---------------- Adiciona Fatos ----------------
+
+% Codigo referente aos caracteres minúsculos
 code('a', 1).
 code('b', 2).
 code('c', 3).
@@ -36,71 +38,99 @@ code('x', 24).
 code('y', 25).
 code('z', 26).
 code(' ', 27).
+code(',', 28).
+code('?', 29).
+code('!', 30).
 
-% Cifra In de acordo com a Letra passada
-cypher(Letter,In,Out):-
-    code(In, X),
-    Y is X + Letter,
-    Z is Y mod 28,
-    code(Out,Z).
+% Letras mais frequentes
+freq(a,0).
+freq(e,1).
+freq(o,2).
+freq(s,3).
+freq(r,4).
 
-% Codigo da Cifra de Cesar
-cesar(Char,StringEntrada,ListaSaida):-
-    code(Char, Deslocamento),
-    (nonvar(StringEntrada) -> 
-        string_chars(StringEntrada, L), maplist(cypher(Deslocamento),L,ListaSaida);
+% ---------------- Funções úteis ----------------
 
-        string_chars(ListaSaida,L), maplist(cypher(Deslocamento),StringEntrada,L)    
-    ).
+% Cifra Char de acordo com a Key passada.
+cypher(Key,Char,Code):-
+    code(Char, X),
+    Y is X + Key,
+    Z is Y mod 32,
+    code(Code,Z).
 
-% Funções úteis
-string2code(In, Out):- 
-    string_chars(In,A),
-    maplist(code(), A, Out).
+% Retorna uma CodeList de codigos referentes aos caracteres da String de entrada.
+string2code(String, CodeList):- 
+    string_chars(String,CharList),
+    maplist(code(), CharList, CodeList).
 
-repeat_word(W,1,W).
-repeat_word(W,N,L):-
-    N1 is N - 1,
-    repeat_word(W,N1,L1),
-    string_concat(W,L1,L).
+% Gera uma String com repetições da palavra de entrada.
+repeat_word(Word,1,Word).
+repeat_word(Word,TimesToRepeat,Out):-
+    Number is TimesToRepeat - 1,
+    repeat_word(Word,Number,AuxList),
+    string_concat(Word,AuxList,Out).
 
+% Cria uma String repetindo a Word de entrada, até que tenha tamanho igual a Length.
 generateKeyStream(Word,Length,Out):-
     string_length(Word,WordLength),
-    Resto is Length mod WordLength,
-    N is (Length-Resto) / WordLength, 
-    repeat_word(Word,N,L), 
-    sub_string(Word,0,Resto,_,L2),
-    string_concat(L, L2, Out).
-    
-vigenere(W1,W2,Out):-
-    (nonvar(W2) -> 
-        string_length(W2,L2),
-        generateKeyStream(W1,L2,L1),
-        string2code(L1,L3),
-        string_chars(W2,W3),
-        maplist(cypher(),L3,W3,Out);
-        
-        length(Out,L2),
-        generateKeyStream(W1,L2,L1),
-        string2code(L1,L3),
-        maplist(cypher(),L3,W2,W3),
-        string_chars(W3,Out)
+    Remain is Length mod WordLength,
+    Number is (Length - Remain) / WordLength, 
+    repeat_word(Word,Number,Stream), 
+    sub_string(Word,0,Remain,_,String),
+    string_concat(Stream, String, Out).
+
+% ---------------- Algoritmos de Cifragem ----------------
+
+% Codigo da Cifra de Cesar.
+cesar(Char,String,Out):-
+    code(Char, Offset),
+    (nonvar(String) ->
+        string_chars(String, CharList), maplist(cypher(Offset),CharList,Out);
+
+        string_chars(Out,CharList), maplist(cypher(Offset),String,CharList)    
     ).
+    
+vigenere(KeyWord,String,Out):-
+    (nonvar(String) -> 
+        string_length(String,StringSize),
+        generateKeyStream(KeyWord,StringSize,KeyStream),
+        string2code(KeyStream,CodeList),
+        string_chars(String,CharList),
+        maplist(cypher(),CodeList,CharList,Out);
+        
+        length(Out,OutSize),
+        generateKeyStream(KeyWord,OutSize,KeyStream),
+        string2code(KeyStream,CodeList),
+        maplist(cypher(),CodeList,String,List),
+        string_chars(List,Out)
+    ).
+
+%cesar('b','ana',Q).
+%Q = [c, p, c].
+
+/*
+cesarBrutalForce(Encoded,Key,String):-
+    length(Encoded,Size),
+    %FAZER LOOP das freq
+    cesar(K1,ALGO,Encoded),
+    %FAZER LOOP do BD
+    current_word(X,Size),
+    ALGO == X
+*/
 
 process:-
     writeln("----------- Teste Cesar ----------"),
 
-    cesar('a',"leobrabo",ListaSaida),
-    string_chars(Frase,ListaSaida),
-    writeln(Frase),
-    cesar('a',StringEntrada,"mfpcsbcp"),
-    string_chars(O,StringEntrada),
-    writeln(O),
+    cesar('a',"leobrabo",List),
+    string_chars(Teste1,List),
+    writeln(Teste1),
+    cesar('a',String,"mfpcsbcp"),
+    string_chars(Teste2,String),
+    writeln(Teste2),
 
     writeln("----------- Teste Vigenere ----------"),
 
-    vigenere("bola","batata",Out),
-    writeln(Out),
-    vigenere("bola",A,[d,p,d,b,v,p]),
-    writeln(A).
-
+    vigenere("bola","batata",Teste3),
+    writeln(Teste3),
+    vigenere("bola",Teste4,[d,p,d,b,v,p]),
+    writeln(Teste4).
