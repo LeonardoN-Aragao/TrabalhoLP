@@ -6,7 +6,7 @@
 
 % Chama persistancy e escolhe arquivo de saida
 :-use_module(wordListDB).
-:- attach_word_db("wordListDB.txt").
+:- attach_word_db("wordListDB.db").
 
 % Adiciona Fatos
 code('a', 1).
