@@ -49,6 +49,7 @@ cesar(Char,StringEntrada,ListaSaida):-
     code(Char, Deslocamento),
     (nonvar(StringEntrada) -> 
         string_chars(StringEntrada, L), maplist(cypher(Deslocamento),L,ListaSaida);
+
         string_chars(ListaSaida,L), maplist(cypher(Deslocamento),StringEntrada,L)    
     ).
 
@@ -85,10 +86,10 @@ vigenere(W1,W2,Out):-
         maplist(cypher(),L3,W2,W3),
         string_chars(W3,Out)
     ).
-    
 
-process:-    
+process:-
     writeln("----------- Teste Cesar ----------"),
+
     cesar('a',"leobrabo",ListaSaida),
     string_chars(Frase,ListaSaida),
     writeln(Frase),
@@ -97,7 +98,7 @@ process:-
     writeln(O),
 
     writeln("----------- Teste Vigenere ----------"),
-    
+
     vigenere("bola","batata",Out),
     writeln(Out),
     vigenere("bola",A,[d,p,d,b,v,p]),
