@@ -53,57 +53,41 @@ cesar(Char,StringEntrada,ListaSaida):-
     ).
 
 % Funções úteis
-%string2code(In, Out):- maplist(code(), In, Out).
+string2code(In, Out):- 
+    string_chars(In,A),
+    maplist(code(), A, Out).
 
-%generatekeyStream(Word,Length,List):-
-%    length(word,L),
-%    generatekeyStream(Word, Length, List).
+repeat_word(W,1,W).
+repeat_word(W,N,L):-
+    N1 is N - 1,
+    repeat_word(W,N1,L1),
+    string_concat(W,L1,L).
 
-%addLetterInList(H,[],[H]).
-%addLetterInList(H,[_ | T],Out):-
-%    addLetterInList(H,T,Out).
-
-len([],0).
-len([_|T],L):-
-    len(T,LT),
-    L is LT+1.
-
-append2([],L,L).
-append2([H|T],L,[H|TL]) :- append2(T,L,TL).
-
-copy(L,R) :- accCp(L,R).
-accCp([],[]).
-accCp([H|T1],[H|T2]) :- accCp(T1,T2).
-
-adicionaOqueDa(Word,Length,Out):-
-    length(Out,OutLenght),
-    length(Word,WordLenght),
+generateKeyStream(Word,Length,Out):-
+    string_length(Word,WordLenght),
+    Resto is Length mod WordLenght,
+    N is (Length-Resto) / WordLenght, 
+    repeat_word(Word,N,L), 
+    sub_string(Word,0,Resto,_,L2),
+    string_concat(L, L2, Out).
     
-    R is OutLenght + WordLenght,
-    ( R < Length ,
-        append(Out,Word,Aux),
-        adicionaOqueDa(Word,Length,Aux);
-        Resto is Length mod WordLenght,
-        copy(Out,Aux),
-        adicionaOResto(Resto,Word,Aux,Out)
+vigenere(W1,W2,Out):-
+    (nonvar(W2) -> 
+        string_length(W2,L2),
+        generateKeyStream(W1,L2,L1),
+        string2code(L1,L3),
+        string_chars(W2,W3),
+        maplist(cypher(),L3,W3,Out);
+        
+        length(Out,L2),
+        generateKeyStream(W1,L2,L1),
+        string2code(L1,L3),
+        maplist(cypher(),L3,W2,W3),
+        string_chars(W3,Out)
     ).
+    
 
-adicionaOResto(0,_,_).
-adicionaOResto(Resto,[H | T],Aux,Out):-
-    string_chars(H,L),
-    append(Aux,L,Out),
-    R is Resto -1,
-    copy(Out,Aux),
-    adicionaOResto(R,T,Aux,Out).
-
-
-vigenere(W1,W2,_Out):-
-    length(W2,L2),
-    adicionaOqueDa(W1,L2,L1),
-    writeln(L1).
-    %maplist(cypher(),L1,W2,Out).
-
-process:-
+process:-    
     writeln("----------- Teste Cesar ----------"),
     cesar('a',"leobrabo",ListaSaida),
     string_chars(Frase,ListaSaida),
@@ -112,12 +96,10 @@ process:-
     string_chars(O,StringEntrada),
     writeln(O),
 
-    guitracer,
-    trace,
-    writeln("----------- Teste Vinagrete ----------"),
-    string_chars("bola",W1),
-    string_chars("batata",W2),
-    vigenere(W1,W2,Out),
-    string_chars(V,Out),
-    writeln(V).
+    writeln("----------- Teste Vigenere ----------"),
+    
+    vigenere("bola","batata",Out),
+    writeln(Out),
+    vigenere("bola",A,[d,p,d,b,v,p]),
+    writeln(A).
 
