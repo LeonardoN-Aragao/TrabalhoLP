@@ -1,6 +1,6 @@
 /*
     Trabalho Linguagem de Programação - UFJF
-    Gabriel Fortunato - 
+    Gabriel Fortunato - 201665074AC
     Leonardo Nunes - 201665565C
 */
 :- module(wordListDB, [ 
@@ -16,7 +16,7 @@ del(Word):- retractall_word(Word, _).
 attach_word_db(FileName):-
     db_attach(FileName, []).
 
-current_word(Word, _Lenght):-
+current_word(Word, _Length):-
     word(Word, _Length).
 
 add_word(Word):-

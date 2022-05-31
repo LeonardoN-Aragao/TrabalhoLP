@@ -1,6 +1,6 @@
 /*
     Trabalho Linguagem de Programação - UFJF
-    Gabriel Fortunato - 
+    Gabriel Fortunato - 201665074AC
     Leonardo Nunes - 201665565C
 */
 
@@ -65,9 +65,9 @@ repeat_word(W,N,L):-
     string_concat(W,L1,L).
 
 generateKeyStream(Word,Length,Out):-
-    string_length(Word,WordLenght),
-    Resto is Length mod WordLenght,
-    N is (Length-Resto) / WordLenght, 
+    string_length(Word,WordLength),
+    Resto is Length mod WordLength,
+    N is (Length-Resto) / WordLength, 
     repeat_word(Word,N,L), 
     sub_string(Word,0,Resto,_,L2),
     string_concat(L, L2, Out).

@@ -1,0 +1,5 @@
+created(1653700431.5708).
+assert(word(['J',a,i,r],4)).
+assert(word(['J',a,i,r,ã,o],6)).
+assert(word(['J',a,v,o],4)).
+assert(word(['J',a,t,o,i,n,o],7)).
