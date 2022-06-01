@@ -34,5 +34,3 @@ del_word(Word):-
     string_chars(Word,List),
     word(List, _),
     del(List).
-
-

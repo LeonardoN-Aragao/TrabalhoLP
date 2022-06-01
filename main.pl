@@ -38,9 +38,6 @@ code('x', 24).
 code('y', 25).
 code('z', 26).
 code(' ', 27).
-code(',', 28).
-code('?', 29).
-code('!', 30).
 
 % Letras mais frequentes
 freq(a,0).
@@ -55,7 +52,7 @@ freq(r,4).
 cypher(Key,Char,Code):-
     code(Char, X),
     Y is X + Key,
-    Z is Y mod 32,
+    Z is Y mod 28,
     code(Code,Z).
 
 % Retorna uma CodeList de codigos referentes aos caracteres da String de entrada.
@@ -67,8 +64,13 @@ string2code(String, CodeList):-
 repeat_word(Word,1,Word).
 repeat_word(Word,TimesToRepeat,Out):-
     Number is TimesToRepeat - 1,
-    repeat_word(Word,Number,AuxList),
-    string_concat(Word,AuxList,Out).
+    ( Number > 1 ->
+        repeat_word(Word,Number,AuxList),
+        string_concat(Word,AuxList,Out);
+
+        repeat_word(Word,1,AuxList),
+        string_concat(Word,AuxList,Out)
+    ).
 
 % Cria uma String repetindo a Word de entrada, até que tenha tamanho igual a Length.
 generateKeyStream(Word,Length,Out):-
@@ -78,6 +80,18 @@ generateKeyStream(Word,Length,Out):-
     repeat_word(Word,Number,Stream), 
     sub_string(Word,0,Remain,_,String),
     string_concat(Stream, String, Out).
+
+% Conta quantidade de ocorrencias de um elemento na String.
+charCount([],_,0).
+charCount([Element|T],Element,Out):-
+    charCount(T,Element,Number),
+    Out is Number+1.
+charCount([_|Tail],Element,Out):-
+    charCount(Tail,Element,Out).
+
+moda(String,L):-
+    string_chars(String,CharList),
+    maplist(charCount(CharList),CharList,L).
 
 % ---------------- Algoritmos de Cifragem ----------------
 
@@ -89,7 +103,8 @@ cesar(Char,String,Out):-
 
         string_chars(Out,CharList), maplist(cypher(Offset),String,CharList)    
     ).
-    
+
+% Codigo da Cifra de Vigenere.
 vigenere(KeyWord,String,Out):-
     (nonvar(String) -> 
         string_length(String,StringSize),
@@ -97,16 +112,13 @@ vigenere(KeyWord,String,Out):-
         string2code(KeyStream,CodeList),
         string_chars(String,CharList),
         maplist(cypher(),CodeList,CharList,Out);
-        
+
         length(Out,OutSize),
         generateKeyStream(KeyWord,OutSize,KeyStream),
         string2code(KeyStream,CodeList),
         maplist(cypher(),CodeList,String,List),
         string_chars(List,Out)
     ).
-
-%cesar('b','ana',Q).
-%Q = [c, p, c].
 
 /*
 cesarBrutalForce(Encoded,Key,String):-
