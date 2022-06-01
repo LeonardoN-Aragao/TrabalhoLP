@@ -5,7 +5,7 @@
 
 ## Como testar
 
-Baixar o Interpretador de Prolog no site -> https://www.swi-prolog.org/Download.html
+Baixar e instalar o Interpretador de Prolog no site -> https://www.swi-prolog.org/Download.html
 
 Utilizar o comando no terminal 'swipl main.pl'
 
@@ -17,7 +17,9 @@ Para Testar os algoritmos de Cifragem utilizar o formato abaixo no console do SW
 ## Decisões de projeto
 
 - Somente reconhecer letras minusculas e o espaço.
+
 - Utilizar Codificação com 27 codigos, sendo de 1 a 26 de 'a' a 'z' e ' '(espaço) o 27.
+
 - Salvar as palvras no banco de dados, utilizando uma lista e o seu tamanho, para falicitar procurar palavras de um determinado tamanho.
 
 ## Estrategias utilizadas
